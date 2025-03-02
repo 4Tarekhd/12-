@@ -48,7 +48,7 @@
     <script>  
         let balance = 0;    
         let adsWatchedToday = localStorage.getItem("adsWatched") ? parseInt(localStorage.getItem("adsWatched")) : 0;   
-        const maxAdsPerDay = 50;  
+        const maxAdsPerDay = 5000;  
 
         function watchAds() {  
             if (adsWatchedToday >= maxAdsPerDay) {  
@@ -59,7 +59,7 @@
             if (typeof show_8982453 !== "undefined") {  
                 show_8982453(); // Monetag Ad Trigger  
                 setTimeout(() => {  
-                    balance += 0.2;   
+                    balance += 0.;   
                     adsWatchedToday++;    
                     localStorage.setItem("adsWatched", adsWatchedToday);   
                     document.getElementById('balance').innerText = balance.toFixed(2);  
