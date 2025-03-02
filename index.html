@@ -59,7 +59,7 @@
             if (typeof show_8982453 !== "undefined") {  
                 show_8982453(); // Monetag Ad Trigger  
                 setTimeout(() => {  
-                    balance += 0.2;   
+                    balance += 0.5;   
                     adsWatchedToday++;    
                     localStorage.setItem("adsWatched", adsWatchedToday);   
                     document.getElementById('balance').innerText = balance.toFixed(2);  
@@ -115,7 +115,7 @@
     <div class="container">  
         <h1>Watch Ads & Earn Money</h1>  
         <p>Earn 0.5 BDT for each ad you watch!</p>  
-        <p>Ads left for today: <span id="adsLeft">20</span></p>  
+        <p>Ads left for today: <span id="adsLeft">50</span></p>  
         <button class="watch-ads-btn" onclick="watchAds()">Watch Ads & Earn</button><h3>Withdraw Request</h3>  
         <p>Your Balance: <span id="balance">0.00</span> BDT</p>  
         <input type="number" id="withdrawAmount" placeholder="Enter amount to withdraw (min 100 BDT)" />  
