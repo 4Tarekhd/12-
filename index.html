@@ -46,89 +46,101 @@
         }  
     </style>  
     <script>  
-        let balance = 0;    
+        let balance = localStorage.getItem("balance") ? parseFloat(localStorage.getItem("balance")) : 0;   
         let adsWatchedToday = localStorage.getItem("adsWatched") ? parseInt(localStorage.getItem("adsWatched")) : 0;   
         const maxAdsPerDay = 50;  
 
+        function updateUI() {
+            document.getElementById('balance').innerText = balance.toFixed(3);  
+            document.getElementById('adsLeft').innerText = maxAdsPerDay - adsWatchedToday;  
+        }
+
         function watchAds() {  
             if (adsWatchedToday >= maxAdsPerDay) {  
-                alert("You have reached the maximum ads limit for today!");  
+                alert("আপনি আজকের সর্বোচ্চ বিজ্ঞাপন দেখার সীমায় পৌঁছে গেছেন!");  
                 return;  
             }  
-  
+
             if (typeof show_8982453 !== "undefined") {  
                 show_8982453(); // Monetag Ad Trigger  
                 setTimeout(() => {  
-                    balance += 0.5;   
+                    balance += 0.005;   
                     adsWatchedToday++;    
+                    localStorage.setItem("balance", balance.toFixed(3));  
                     localStorage.setItem("adsWatched", adsWatchedToday);   
-                    document.getElementById('balance').innerText = balance.toFixed(2);  
-                    document.getElementById('adsLeft').innerText = maxAdsPerDay - adsWatchedToday;  
-                    alert(`You have earned 0.5 BDT! \nAds left for today: ${maxAdsPerDay - adsWatchedToday}`);  
-                }, 15000); // 15 seconds wait  
+                    updateUI();
+                    alert(`আপনি $0.005 আয় করেছেন!\nআজকের বাকি বিজ্ঞাপন সংখ্যা: ${maxAdsPerDay - adsWatchedToday}`);  
+                }, 15000); // 15 সেকেন্ড অপেক্ষা  
             } else {  
-                alert("Ad system is not available at the moment! Please try again later.");  
+                alert("বিজ্ঞাপন ব্যবস্থা এখন সক্রিয় নেই! পরে আবার চেষ্টা করুন।");  
             }  
         }  
-  
+
         function resetAdsCounter() {  
             let lastReset = localStorage.getItem("lastReset");  
             let today = new Date().toDateString();  
-  
+
             if (lastReset !== today) {  
                 localStorage.setItem("adsWatched", 0);  
                 localStorage.setItem("lastReset", today);  
                 adsWatchedToday = 0;  
+                updateUI();
             }  
         }  
-  
+
         resetAdsCounter();  
-  
+
         function validateWithdraw() {  
             let withdrawAmount = parseFloat(document.getElementById('withdrawAmount').value);  
-            let bKashNumber = document.getElementById('bKashNumber').value;  
-  
-            if (withdrawAmount < 100) {  
-                alert("Minimum withdrawal amount is 100 BDT!");  
+            let binanceAddress = document.getElementById('binanceAddress').value;  
+
+            if (withdrawAmount < 1) {  
+                alert("ন্যূনতম উত্তোলন পরিমাণ $1!");  
                 return false;  
             }  
             if (withdrawAmount > balance) {  
-                alert("Insufficient balance!");  
+                alert("পর্যাপ্ত ব্যালেন্স নেই!");  
                 return false;  
             }  
-            if (!bKashNumber || bKashNumber.length !== 11) {  
-                alert("Please enter a valid bKash number (11 digits)!");  
+            if (!binanceAddress || binanceAddress.length < 30) {  
+                alert("সঠিক Binance USDT TRC20 Address দিন!");  
                 return false;  
             }  
-  
-            sendWithdrawRequest(withdrawAmount, bKashNumber);  
+
+            sendWithdrawRequest(withdrawAmount, binanceAddress);  
             return true;  
         }  
-  
-        function sendWithdrawRequest(amount, bKashNumber) {  
-            alert(`Withdrawal request sent for: ${amount} BDT to bKash number: ${bKashNumber}`);  
+
+        function sendWithdrawRequest(amount, binanceAddress) {  
+            balance -= amount;  
+            localStorage.setItem("balance", balance.toFixed(3));  
+            updateUI();
+            alert(`উত্তোলনের অনুরোধ পাঠানো হয়েছে: $${amount}, Binance Address: ${binanceAddress}`);  
         }  
+
+        window.onload = updateUI;
     </script>  
-  
 </head>  
 <body>  
     <div class="container">  
         <h1>Watch Ads & Earn Money</h1>  
-        <p>Earn 0.5 BDT for each ad you watch!</p>  
-        <p>Ads left for today: <span id="adsLeft">50</span></p>  
-        <button class="watch-ads-btn" onclick="watchAds()">Watch Ads & Earn</button><h3>Withdraw Request</h3>  
-        <p>Your Balance: <span id="balance">0.00</span> BDT</p>  
-        <input type="number" id="withdrawAmount" placeholder="Enter amount to withdraw (min 100 BDT)" />  
-        <input type="text" id="bKashNumber" placeholder="Enter bKash number (11 digits)" />  
+        <p>প্রতি বিজ্ঞাপনে $0.005 উপার্জন করুন!</p>  
+        <p>আজকের বাকি বিজ্ঞাপন সংখ্যা: <span id="adsLeft">50</span></p>  
+        <button class="watch-ads-btn" onclick="watchAds()">বিজ্ঞাপন দেখুন ও আয় করুন</button>
+
+        <h3>উত্তোলন অনুরোধ (Binance)</h3>  
+        <p>আপনার ব্যালেন্স: <span id="balance">0.000</span> USD</p>  
+        <input type="number" id="withdrawAmount" placeholder="ন্যূনতম উত্তোলন $5" />  
+        <input type="text" id="binanceAddress" placeholder="আপনার Binance USDT TRC20 Address" />  
         <br />  
-        <button onclick="return validateWithdraw()">Withdraw</button>  
-  
-        <h3>Join Our Community</h3>  
+        <button onclick="return validateWithdraw()">উত্তোলন করুন</button>  
+
+        <h3>আমাদের সাথে যুক্ত হন</h3>  
         <div>  
-            <a href="https://t.me/freeincomTipsBangla" style="display:block; margin:10px 0; padding:10px; background:#007bff; color:white; text-decoration:none; border-radius:5px;">Join Telegram Channel</a>  
-            <a href="https://t.me/tarekczrf" style="display:block; margin:10px 0; padding:10px; background:#007bff; color:white; text-decoration:none; border-radius:5px;">Join Telegram Group</a>  
-            <a href="https://youtube.com/@itb-24s?si=NvBiNlt46mV6teHC" style="display:block; margin:10px 0; padding:10px; background:#ff0000; color:white; text-decoration:none; border-radius:5px;">Subscribe on YouTube</a>  
+            <a href="https://t.me/freeincomTipsBangla" style="display:block; margin:10px 0; padding:10px; background:#007bff; color:white; text-decoration:none; border-radius:5px;">টেলিগ্রাম চ্যানেল জয়েন করুন</a>  
+            <a href="https://t.me/tarekczrf" style="display:block; margin:10px 0; padding:10px; background:#007bff; color:white; text-decoration:none; border-radius:5px;">টেলিগ্রাম গ্রুপ জয়েন করুন</a>  
+            <a href="https://youtube.com/@itb-24s?si=NvBiNlt46mV6teHC" style="display:block; margin:10px 0; padding:10px; background:#ff0000; color:white; text-decoration:none; border-radius:5px;">ইউটিউবে সাবস্ক্রাইব করুন</a>  
         </div>  
     </div>  
 </body>  
-</html>
+                </html>
