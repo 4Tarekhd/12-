@@ -48,7 +48,7 @@
     <script>  
         let balance = 0;    
         let adsWatchedToday = localStorage.getItem("adsWatched") ? parseInt(localStorage.getItem("adsWatched")) : 0;   
-        const maxAdsPerDay = 20;  
+        const maxAdsPerDay = 50;  
 
         function watchAds() {  
             if (adsWatchedToday >= maxAdsPerDay) {  
@@ -64,7 +64,7 @@
                     localStorage.setItem("adsWatched", adsWatchedToday);   
                     document.getElementById('balance').innerText = balance.toFixed(2);  
                     document.getElementById('adsLeft').innerText = maxAdsPerDay - adsWatchedToday;  
-                    alert(`You have earned 0.2 BDT! \nAds left for today: ${maxAdsPerDay - adsWatchedToday}`);  
+                    alert(`You have earned 0.5 BDT! \nAds left for today: ${maxAdsPerDay - adsWatchedToday}`);  
                 }, 15000); // 15 seconds wait  
             } else {  
                 alert("Ad system is not available at the moment! Please try again later.");  
@@ -114,7 +114,7 @@
 <body>  
     <div class="container">  
         <h1>Watch Ads & Earn Money</h1>  
-        <p>Earn 0.2 BDT for each ad you watch!</p>  
+        <p>Earn 0.5 BDT for each ad you watch!</p>  
         <p>Ads left for today: <span id="adsLeft">20</span></p>  
         <button class="watch-ads-btn" onclick="watchAds()">Watch Ads & Earn</button><h3>Withdraw Request</h3>  
         <p>Your Balance: <span id="balance">0.00</span> BDT</p>  
