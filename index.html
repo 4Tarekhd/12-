@@ -48,7 +48,7 @@
     <script>  
         let balance = localStorage.getItem("balance") ? parseFloat(localStorage.getItem("balance")) : 0;   
         let adsWatchedToday = localStorage.getItem("adsWatched") ? parseInt(localStorage.getItem("adsWatched")) : 0;   
-        const maxAdsPerDay = 50;  
+        const maxAdsPerDay = 500;  
 
         function updateUI() {
             document.getElementById('balance').innerText = balance.toFixed(3);  
